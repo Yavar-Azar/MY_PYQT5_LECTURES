@@ -22,7 +22,6 @@ from PyQt5.QtWidgets import (
     QSizePolicy,   
     QLineEdit,
     QFileDialog,
-    QComboBox,
 )
 
 
@@ -56,72 +55,39 @@ class pseudo(QWidget):
         
         Hbox = QHBoxLayout()
         
-        self.pseudodict={}
-
-        self.elementlist = QLabel("Elements")
         
+        self.elementlist = QLabel("Elements")
 
         layout1.addWidget(self.elementlist)
         verticalSpacer = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
         layout1.addItem(verticalSpacer)
         
-        self.pseudolb = QLabel("        pseudo file name       ")
-        
-        self.updatebut=QPushButton("UPDATE")
-        
+        self.pseudolb = QLabel("pseudofiles")
         
         layout2.addWidget(self.pseudolb)
-        layout2.addWidget(self.updatebut)
         layout2.addItem(verticalSpacer)
         
         self.selectlb = QLabel("Select pseudo file")
         layout3.addWidget(self.selectlb)
-        self.findlocalbt = QPushButton("pseudo local directory    ")
-        layout3.addWidget(self.findlocalbt)
-        layout3.addStretch()
         
-        #########  FUNCTIONS
-
-        self.findlocalbt.clicked.connect(self.selectdirectory)
-        self.updatebut.clicked.connect(self.updateselected)
         
         for element in elements:
-            bott = QPushButton(self)
-            bott.setObjectName(element+"pushbut")
-            bott.setText(element)
-            bott.setStyleSheet("QPushButton::hover"
+            self.bott = QPushButton(element)
+            self.bott.setStyleSheet("QPushButton::hover"
                              "{"
                              "background-color : lightgreen;"
                              "}")
-            layout1.addWidget(bott)
-            elemntld =QLineEdit(self)
-            elemntld.setObjectName(element+"lineedit")
-            layout2.addWidget(elemntld)
-            cmbo = QComboBox(self)
-           # cmbo.addItems(listofseudo)
-            cmbo.setObjectName(element+"combo")
-            layout3.addWidget(cmbo)
-            
-            
+            layout1.addWidget(self.bott)
+            self.elemntld =QLineEdit("")
+            layout2.addWidget(self.elemntld)
         
         
         Hbox.addLayout(layout1)
         Hbox.addLayout(layout2)
-        Hbox.addLayout(layout3)
         self.setLayout(Hbox)
 
 
     def selectdirectory(self):
-        '''
-        
-
-        Returns
-        -------
-        my_dir : string
-            local repository for pseudo files.
-        pseudodict : dictionary
-            dictionary with pseudo address .
-        '''
         
         my_dir = QFileDialog.getExistingDirectory(
             self,
@@ -133,35 +99,12 @@ class pseudo(QWidget):
         
         
         for element in elements:
-            search1=my_dir+"/"+element+"*.upf"
-            search2=my_dir+"/"+element+"*.UPF"
-            listofseudo=glob.glob(search1)
-            listofseudo.extend(glob.glob(search2))
-            self.pseudodict.update({element: listofseudo})
-            cmbo1=self.findChild(QComboBox, element+"combo")
-            cmbo1.addItems(listofseudo)
-
-
-    def updateselected(self):
-        
-        
-        for element in elements:
-            ellineedit = self.findChild(QLineEdit, element+"lineedit")
-            cmbo1=self.findChild(QComboBox, element+"combo")
-            ellineedit.setText(cmbo1.currentText().split("/")[-1])
-        
+            serach=my_dir+"/"+element+"*.UPF"
             
         
         
-        
-        
-#        print(self.pseudodict)
-
-
-
-
-    
-        
+                
+        return my_dir
     
     
     
